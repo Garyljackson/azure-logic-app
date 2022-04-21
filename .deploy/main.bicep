@@ -3,6 +3,8 @@ param location string = resourceGroup().location
 var appServicePlanName = 'asp-${uniqueString(resourceGroup().id)}'
 var storageAccountName = 'sa${uniqueString(resourceGroup().id)}'
 var webAppName = 'webApp-${uniqueString(resourceGroup().id)}'
+var appInsightsWorkspaceName = 'ws-${webAppName}'
+var appInsightsName = 'ai-${webAppName}'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: storageAccountName
@@ -11,6 +13,24 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
     name: 'Standard_GRS'
   }
   kind: 'Storage'
+}
+
+resource appInsightsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview'={
+  name: appInsightsWorkspaceName
+  location: location
+}
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: appInsightsName
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    RetentionInDays: 90
+    publicNetworkAccessForIngestion: 'Enabled'
+    publicNetworkAccessForQuery: 'Enabled'
+    WorkspaceResourceId:appInsightsWorkspace.id
+  }
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
@@ -55,6 +75,10 @@ resource webApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
         }
       ]
     }

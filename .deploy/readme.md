@@ -20,5 +20,5 @@ az deployment group create \
 
 
 Bicep CLI Doco:  
-https://docs.microsoft.com/en-us/cli/azure/bicep?view=azure-cli-latest
-https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli
+https://docs.microsoft.com/en-us/cli/azure/bicep?view=azure-cli-latest  
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli  
