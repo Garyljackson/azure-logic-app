@@ -4,3 +4,8 @@ bin
 obj
 appsettings.json
 local.settings.json
+
+
+# Azurite
+__blobstorage__
+__azurite_db_*
