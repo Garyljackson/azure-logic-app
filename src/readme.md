@@ -1,4 +1,6 @@
-# To run in dev
+# How to
+
+## Build and run
 
 - Open this folder (`src`) in a dev container
   - This will build a docker based dev environment with all required software and extensions
@@ -8,7 +10,7 @@
 - In the overview, click the `Callback URL` to view the service response
 
 
-# To deploy to Azure  
+## Deploy to Azure  
 
 - Select the `Azure` Visual Studio Code extension
 - Log into Azure if you haven't yet

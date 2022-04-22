@@ -1,10 +1,11 @@
+# How to
+## Deploy
+To deploy the infrastructure to Azure, run the following commands the VS Code terminal
+
 
 ```
-# Build ARM template from Bicep file - write to console
- az bicep build --file main.bicep --stdout
-
-# Build ARM template from Bicep file - write to file
-az bicep build --file main.bicep --outfile azuredeploy.json   
+# Log into Azure
+az login
 
 # Create resource group
 az group create --name ExampleGroup --location australiaeast
@@ -15,6 +16,18 @@ az deployment group create \
   --resource-group ExampleGroup \
   --template-file main.bicep \
   --parameters location=australiaeast
+
+```
+
+## Handy bicep commands
+### Build an ARM template
+
+```
+# Write to console
+ az bicep build --file main.bicep --stdout
+
+# Write to file
+az bicep build --file main.bicep --outfile azuredeploy.json   
 
 ```
 
