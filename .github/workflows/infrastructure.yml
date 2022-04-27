@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - "/.deploy"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  DeployDev:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+    environment: 
+      name: Dev
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS  }}
+        enable-AzPSSession: true 
+
+    # Checkout
+    - name: Checkout
+      uses: actions/checkout@v1
