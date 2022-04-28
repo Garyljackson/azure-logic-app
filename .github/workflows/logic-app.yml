@@ -3,6 +3,7 @@ name: deploy-logic-app
 on:
   workflow_run:
     workflows: ["deploy-infrastructure"]
+    types: [completed]
 
   push:
     branches: [main]
@@ -13,6 +14,7 @@ on:
 
 env:
   LOGIC_APP_NAME: 'logicApp-kxofjnzxyzq36'
+  AZURE_RESOURCEGROUP: ExampleLogicApp
 
 jobs:
   logic_app_build:
@@ -58,24 +60,24 @@ jobs:
         with:
           inlineScript: |
             $profile = Get-AzWebAppPublishingProfile `
-                -ResourceGroupName ${{ secrets.AZURE_RESOURCEGROUP }} `
+                -ResourceGroupName ${{ env.AZURE_RESOURCEGROUP }} `
                 -Name ${{ env.LOGIC_APP_NAME }}
             $profile = $profile.Replace("`r", "").Replace("`n", "")
             Write-Output "::set-output name=profile::$profile"
           azPSVersion: latest
 
-      # - name: Deploy to Azure Logic App
-      #   uses: Azure/functions-action@v1.3.1
-      #   id: la
-      #   with:
-      #     app-name: ${{secrets.RG_LA}}
-      #     package: "./output/logic.zip"
-      #     publish-profile: ${{steps.publishprofile.outputs.profile}}
+      - name: Deploy to Azure Logic App
+        uses: Azure/functions-action@v1.3.1
+        id: la
+        with:
+          app-name: ${{env.AZURE_RESOURCEGROUP}}
+          package: "./output/logic.zip"
+          publish-profile: ${{steps.publishprofile.outputs.profile}}
 
-      # - name: Swap parameter files
-      #   id: params
-      #   uses: azure/powershell@v1
-      #   with:
-      #     inlineScript: |
-      #       az functionapp deploy --resource-group ${{ secrets.RG_LA }} --name ${{ env.LA_NAME }} --src-path  logic/azure.parameters.json --type static --target-path parameters.json
-      #     azPSVersion: latest
+      - name: Swap parameter files
+        id: params
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            az functionapp deploy --resource-group ${{ env.AZURE_RESOURCEGROUP }} --name ${{ env.LOGIC_APP_NAME }} --src-path  logic/azure.parameters.json --type static --target-path parameters.json
+          azPSVersion: latest
