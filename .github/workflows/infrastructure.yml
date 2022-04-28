@@ -10,7 +10,7 @@ on:
 
 jobs:
   Deploy:
-    name: Deploy to Dev
+    name: Deploy Infrastructure
     runs-on: ubuntu-latest
     steps:
       - name: Azure Login
