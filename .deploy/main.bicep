@@ -2,9 +2,9 @@ param location string = resourceGroup().location
 
 var appServicePlanName = 'asp-${uniqueString(resourceGroup().id)}'
 var storageAccountName = 'sa${uniqueString(resourceGroup().id)}'
-var webAppName = 'webApp-${uniqueString(resourceGroup().id)}'
-var appInsightsWorkspaceName = 'ws-${webAppName}'
-var appInsightsName = 'ai-${webAppName}'
+var logicAppName = 'ExampleLogicApp'
+var appInsightsWorkspaceName = 'ws-${logicAppName}'
+var appInsightsName = 'ai-${logicAppName}'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: storageAccountName
@@ -47,7 +47,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 }
 
 resource webApp 'Microsoft.Web/sites@2021-03-01' = {
-  name: webAppName
+  name: logicAppName
   location: location
   kind: 'functionapp,workflowapp'
 
