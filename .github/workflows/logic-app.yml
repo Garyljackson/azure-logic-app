@@ -11,6 +11,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  LOGIC_APP_NAME: 'logicApp-kxofjnzxyzq36'
+
 jobs:
   logic_app_build:
     name: Build
@@ -29,50 +32,50 @@ jobs:
           path: ./output/
           retention-days: 1
 
-  # logic_app_deploy:
-  #   name: Deploy
-  #   runs-on: ubuntu-latest
-  #   needs: [logic_app_build]
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  logic_app_deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [logic_app_build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Login via Az module
-  #       uses: azure/login@v1
-  #       with:
-  #         creds: ${{secrets.AZURE_CREDENTIALS}}
-  #         enable-AzPSSession: true
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          enable-AzPSSession: true
 
-  #     - name: Download Logic App Build
-  #       uses: actions/download-artifact@master
-  #       with:
-  #         name: logic
-  #         path: ./output/
+      - name: Download Logic App Build
+        uses: actions/download-artifact@master
+        with:
+          name: logic
+          path: ./output/
 
-  #     - name: Get publish Profile
-  #       id: publishprofile
-  #       uses: azure/powershell@v1
-  #       with:
-  #         inlineScript: |
-  #           $profile = Get-AzWebAppPublishingProfile `
-  #               -ResourceGroupName ${{ secrets.AZURE_RESOURCEGROUP }} `
-  #               -Name ${{ env.LA_NAME }}
-  #           $profile = $profile.Replace("`r", "").Replace("`n", "")
-  #           Write-Output "::set-output name=profile::$profile"
-  #         azPSVersion: latest
+      - name: Get publish Profile
+        id: publishprofile
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $profile = Get-AzWebAppPublishingProfile `
+                -ResourceGroupName ${{ secrets.AZURE_RESOURCEGROUP }} `
+                -Name ${{ env.LOGIC_APP_NAME }}
+            $profile = $profile.Replace("`r", "").Replace("`n", "")
+            Write-Output "::set-output name=profile::$profile"
+          azPSVersion: latest
 
-  #     - name: Deploy to Azure Logic App
-  #       uses: Azure/functions-action@v1.3.1
-  #       id: la
-  #       with:
-  #         app-name: ${{secrets.RG_LA}}
-  #         package: "./output/logic.zip"
-  #         publish-profile: ${{steps.publishprofile.outputs.profile}}
+      # - name: Deploy to Azure Logic App
+      #   uses: Azure/functions-action@v1.3.1
+      #   id: la
+      #   with:
+      #     app-name: ${{secrets.RG_LA}}
+      #     package: "./output/logic.zip"
+      #     publish-profile: ${{steps.publishprofile.outputs.profile}}
 
-  #     - name: Swap parameter files
-  #       id: params
-  #       uses: azure/powershell@v1
-  #       with:
-  #         inlineScript: |
-  #           az functionapp deploy --resource-group ${{ secrets.RG_LA }} --name ${{ env.LA_NAME }} --src-path  logic/azure.parameters.json --type static --target-path parameters.json
-  #         azPSVersion: latest
+      # - name: Swap parameter files
+      #   id: params
+      #   uses: azure/powershell@v1
+      #   with:
+      #     inlineScript: |
+      #       az functionapp deploy --resource-group ${{ secrets.RG_LA }} --name ${{ env.LA_NAME }} --src-path  logic/azure.parameters.json --type static --target-path parameters.json
+      #     azPSVersion: latest
