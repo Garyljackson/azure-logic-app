@@ -33,6 +33,13 @@ jobs:
           bicepFilePath: .deploy/main.bicep
           outputFilePath: ./azuredeploy.json
 
+      # Save the ARM template used
+      - name: Save generated ARM template for reference
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: generated-arm-template
+          path: ./azuredeploy.json
+
       # Deploy the ARM template
       - name: Deploy ARM template
         uses: Azure/arm-deploy@v1
@@ -40,10 +47,3 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUB }}
           resourceGroupName: $AZURE_RESOURCEGROUP
           template: ./azuredeploy.json
-
-      # Save the ARM template used
-      - name: Save generated ARM template for reference
-        uses: actions/upload-artifact@v3.0.0
-        with:
-          name: generated-arm-template
-          path: ./azuredeploy.json
