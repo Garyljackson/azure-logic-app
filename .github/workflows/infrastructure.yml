@@ -37,3 +37,8 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUB }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCEGROUP }}
           template: ./azuredeploy.json
+
+      # Save the ARM template used
+      - name: Save generated ARM template for reference
+        uses: actions/upload-artifact@v3.0.0
+          path: ./azuredeploy.json
