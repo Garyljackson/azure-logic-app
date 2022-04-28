@@ -22,9 +22,18 @@ jobs:
       # Checkout
       - name: Checkout
         uses: actions/checkout@v3
+
       # Build ARM template using bicep
       - name: Bicep Build
         uses: Azure/bicep-build-action@v1.0.0
         with:
           bicepFilePath: .deploy/main.bicep
           outputFilePath: ./azuredeploy.json
+
+      # Deploy the ARM template
+      - name: Deploy ARM template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUB }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCEGROUP }}
+          template: ./azuredeploy.json
