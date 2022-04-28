@@ -8,6 +8,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  AZURE_RESOURCEGROUP: ExampleLogicApp
+
 jobs:
   Deploy:
     name: Deploy Infrastructure
@@ -35,7 +38,7 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUB }}
-          resourceGroupName: ${{ secrets.AZURE_RESOURCEGROUP }}
+          resourceGroupName: $AZURE_RESOURCEGROUP
           template: ./azuredeploy.json
 
       # Save the ARM template used
