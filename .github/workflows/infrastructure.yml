@@ -41,4 +41,6 @@ jobs:
       # Save the ARM template used
       - name: Save generated ARM template for reference
         uses: actions/upload-artifact@v3.0.0
+        with:
+          name: generated-arm-template
           path: ./azuredeploy.json
