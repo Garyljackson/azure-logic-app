@@ -2,7 +2,7 @@ param location string = resourceGroup().location
 
 var appServicePlanName = 'asp-${uniqueString(resourceGroup().id)}'
 var storageAccountName = 'sa${uniqueString(resourceGroup().id)}'
-var logicAppName = 'ExampleLogicApp'
+var logicAppName = 'logicApp-${uniqueString(resourceGroup().id)}'
 var appInsightsWorkspaceName = 'ws-${logicAppName}'
 var appInsightsName = 'ai-${logicAppName}'
 
