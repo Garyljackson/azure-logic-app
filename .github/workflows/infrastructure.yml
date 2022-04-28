@@ -26,5 +26,5 @@ jobs:
       - name: Bicep Build
         uses: Azure/bicep-build-action@v1.0.0
         with:
-        bicepFilePath: .deploy/main.bicep
-        outputFilePath: ./azuredeploy.json
+          bicepFilePath: .deploy/main.bicep
+          outputFilePath: ./azuredeploy.json
