@@ -45,5 +45,5 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUB }}
-          resourceGroupName: $AZURE_RESOURCEGROUP
+          resourceGroupName: ${{ env.AZURE_RESOURCEGROUP }}
           template: ./azuredeploy.json
